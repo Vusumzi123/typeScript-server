@@ -1,0 +1,1 @@
+#Web service template made with tipe script
