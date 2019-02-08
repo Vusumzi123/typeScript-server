@@ -1,43 +1,33 @@
 import * as path from 'path';
 import * as express from 'express';
-import * as logger from 'morgan';
+import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
+import * as swaggerUi from 'swagger-ui-express';
+import { Routes } from './routes';
 
 // Creates and configures an ExpressJS web server.
 class App {
 
     // ref to Express instance
-    public express: express.Application;
+    public app: express.Application;
+
+    private swaggerDocument = require('../swagger.json');
 
     //Run configuration methods on the Express instance.
     constructor() {
-        this.express = express();
+        this.app = express();
         this.middleware();
-        this.routes();
+        new Routes(this.app);
     }
 
     // Configure Express middleware.
     private middleware(): void {
-        this.express.use(logger('dev'));
-        this.express.use(bodyParser.json());
-        this.express.use(bodyParser.urlencoded({ extended: false }));
-    }
-
-    // Configure API endpoints.
-    private routes(): void {
-        /* This is just to get up and running, and to make sure what we've got is
-        * working so far. This function will change when we start to add more
-        * API endpoints */
-        let router = express.Router();
-        // placeholder route handler
-        router.get('/', (req, res, next) => {
-            res.json({
-                message: 'Hello World!'
-            });
-        });
-        this.express.use('/', router);
+        this.app.use(morgan('dev'));
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(this.swaggerDocument));
     }
 
 }
 
-export default new App().express;
+export default new App().app;

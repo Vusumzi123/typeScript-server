@@ -2,6 +2,7 @@ import * as http from 'http';
 import * as debug from 'debug';
 
 import App from './App';
+import { LOGGER } from './_util/logger';
 
 debug('ts-express:server');
 
@@ -40,5 +41,6 @@ function onError(error: NodeJS.ErrnoException): void {
 function onListening(): void {
     let addr = server.address();
     let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
+    LOGGER.info(`listening on ${bind}`);
     debug(`Listening on ${bind}`);
 }
