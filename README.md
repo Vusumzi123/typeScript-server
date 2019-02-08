@@ -1,9 +1,10 @@
-#node-express-ts Server#
+# node-express-ts Server
 
 this is Web service boilerplate for typeScript and nodeJs
 it requires this dependencies to be installed globally.
 
-###Steps###
+### Steps
+
 to install server 
 1. Run npm install
 ```
