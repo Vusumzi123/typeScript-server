@@ -1,7 +1,6 @@
 # node-express-ts Server
 
-this is Web service boilerplate for typeScript and nodeJs
-it requires this dependencies to be installed globally.
+This is a Web service boilerplate for typeScript and nodeJs
 
 ### Steps
 
@@ -11,6 +10,7 @@ to install server
 npm install
 ```
 2. Install the global node modules
+it requires this dependencies to be installed globally.
 ```
 npm install -g gulp
 npm install -g chai
