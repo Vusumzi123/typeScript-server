@@ -21,7 +21,7 @@ npm install -g selenium-webdriver
 ```
 npm start
 ```
-4.To run the server in watch mode run:
+4. To run the server in watch mode run:
 ```
 npm run watch
 ```
