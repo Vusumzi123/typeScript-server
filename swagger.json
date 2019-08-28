@@ -1,59 +1,725 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "Yet Another Node.js Blogg Application API",
-      "description": "Yet Another Node.js Blogg Application API",
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
-      }
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "PROJDEV api back-end",
+    "description": "Back-end for PRO-J application",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "User",
+      "description": "API for users in the system"
     },
-    "host": "localhost:3000",
-    "basePath": "/api/v1",
-    "tags": [
-      {
-        "name": "Users",
-        "description": "API for users in the system"
-      }
-    ],
-    "schemes": [
-      "http"
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "paths": {
+    {
+      "name": "Assignment",
+      "description": "API for assignments in the system"
     },
-    "definitions": {
-      "User": {
-        "required": [
-          "email",
-          "_id"
+    {
+      "name": "Project",
+      "description": "API for project in the system"
+    },
+    {
+      "name": "EncHash",
+      "description": "Get ENC key"
+    },
+    {
+      "name": "Authenticate",
+      "description": "Verify if userId and hash exist in the database"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/user/{userId}": {
+      "post": {
+        "tags": [
+          "User"
         ],
-        "properties": {
-          "_id": {
-            "type": "string",
-            "uniqueItems": true
-          },
-          "email": {
-            "type": "string",
-            "uniqueItems": true
-          },
-          "lastName": {
+        "summary": "Create new user in system",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "User's email. Is the userName.",
+            "requiered": true,
             "type": "string"
           },
-          "firstName": {
+          {
+            "name": "firstName",
+            "in": "formData",
+            "description": "Firstname of user",
+            "requiered": true,
             "type": "string"
+          },
+          {
+            "name": "lastName",
+            "in": "formData",
+            "description": "Lastname of user",
+            "requiered": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "User's password. Hash",
+            "requiered": true,
+            "type": "string"
+          },
+          {
+            "name": "roleId",
+            "in": "formData?",
+            "description": "RoleId of user: Admin, user or guest",
+            "requiered": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New user is created",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Field requiered o is wrong"
+          },
+          "500": {
+            "description": "Can't create user"
+          }
+        }
+      }, 
+
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Find one user by _id or email",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "User's email. Is the userName.",
+            "requiered": true,
+            "type": "string"
+          },
+          {
+            "name": "_id",
+            "in": "path",
+            "description": "Id of user",
+            "requiered": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User find",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "User not fout"
           }
         }
       },
-      "Users": {
-        "type": "array",
-        "$ref": "#/definitions/User"
+
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Update user with ID or email",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "User's email. Is the userName.",
+            "requiered": true,
+            "type": "string"
+          },
+          {
+            "name": "_id",
+            "in": "path",
+            "description": "Id of user",
+            "requiered": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "500": {
+            "description": "Can't not updated user"
+          }
+        }
+      },
+
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Delete user with ID or email",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "description": "User's email. Is the userName.",
+            "requiered": true,
+            "type": "string"
+          },
+          {
+            "name": "_id",
+            "in": "path",
+            "description": "Id of user",
+            "requiered": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          },
+          "500": {
+            "description": "Can't not deleted user"
+          }
+        }
+      }
+    },
+
+    "/users": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get all users in system",
+        "responses": {
+          "200": {
+            "description": "Users found",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          },
+          "404": {
+            "description": "Users not found"
+          },
+          "500": {
+            "description": "Couldn´t find search for users"
+          }
+        }
+      }
+    },
+
+    "/assignment:{assignmentId}": {
+      "get": {
+        "tags": [
+          "Assignment"
+        ],
+        "summary": "Find assignment by id",
+        "parameters": [
+          {
+            "name": "assignmentId",
+            "in": "body",
+            "description": "Id of assignment",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: Assignment found",
+            "schema": {
+              "$ref": "#/definitions/Assignment"
+            }
+          },
+          "404": {
+            "description": "No assignment found"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
+
+      "post": {
+        "tags": [
+          "Assignment"
+        ],
+        "summary": "Create new assignment in system",
+        "parameters": [
+          {
+            "name": "assignment",
+            "in": "body",
+            "description": "Assignment that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Assignment"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: Assignment save successfully",
+            "schema": {
+              "$ref": "#/definitions/Assignment"
+            }
+          },
+          "500": {
+            "description": "Couldn't save assignment"
+          }
+        }
+      },
+
+      "put": {
+        "summary": "Update assignment with projectId",
+        "tags": [
+          "Assignment"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of Assignment to update",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "name": "assignment",
+            "in": "body",
+            "description": "Assignment with new values of properties",
+            "required":true,
+            "schema": {
+              "$ref": "#/definitions/Assignment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Assignment updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Assignment"
+            }
+          },
+          "500": {
+            "description": "Can't update assignmet"
+          }
+        }
+      },
+      
+      "delete": {
+        "summary": "Delete assignment with assignmentId",
+        "tags": [
+          "Assignment"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of Assignment to deleted",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Assignment deleted successfully"
+          },
+          "500": {
+            "description": "Can't delete assignmet"
+          }
+        }
+      }
+    },
+
+    "/assignments": {
+      "post": {
+        "tags": [
+          "Assignment"
+        ],
+        "summary": "Get all assignments in the system",
+        "responses": {
+          "200": {
+            "description": "Assignments found",
+            "schema": {
+              "$ref": "#/definitions/Assingments"
+            }
+          },
+          "400": {
+            "description": "Error"
+          },
+          "404": {
+            "description": "No assigments found"
+          },
+          "500": {
+            "description": "Couldn´t find search for assignment"
+          }
+        }
+      }
+    },
+
+    "/project:{projectId}": {
+      "get": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "Find project by id",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "body",
+            "description": "Id of project",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: Project found",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          },
+          "404": {
+            "description": "No project found"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
+
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "Create new project in system",
+        "parameters": [
+          {
+            "name": "project",
+            "in": "body",
+            "description": "Project that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: Project created successfully",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          },
+          "500": {
+            "description": "Couldn't created Project"
+          }
+        }
+      },
+
+      "put": {
+        "summary": "Update a project with projectId",
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "Id of Project to update",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "name": "email",
+            "in": "path",
+            "description": "User's email can be the projectId",
+            "required":false,
+            "type":"string"
+          },
+          {
+            "name": "project",
+            "in": "body",
+            "description": "Project with new values of properties",
+            "required":true,
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          },
+          "500": {
+            "description": "Can't update project"
+          }
+        }
+      },
+      
+      "delete": {
+        "summary": "Delete Project with ProjectId",
+        "tags": [
+          "Project"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "body",
+            "description": "Id of Project to upddeleteate",
+            "required":true,
+            "type":"string"
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "description": "Name of Project to delete",
+            "required":true,
+            "type":"string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project deleted successfully"
+          },
+          "404": {
+            "description": "No project found"
+          }
+        }
+      }
+    },
+
+    "/projects": {
+      "post": {
+        "tags": [
+          "Project"
+        ],
+        "summary": "Get all projects in the system",
+        "responses": {
+          "200": {
+            "description": "Projects found",
+            "schema": {
+              "$ref": "#/definitions/Projects"
+            }
+          },
+          "404": {
+            "description": "No projects found"
+          },
+          "500": {
+            "description": "Couldn´t find search for assignments"
+          }
+        }
+      }
+    },
+
+    "/EncHash": {
+      "get": {
+        "tags": [
+          "EncHash"
+        ],
+        "summary": "Get ENC key",
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "description": "Hash to encrypt or decrypt",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+          
+        }
+      }
+    },
+    
+    "/users/authenticate": {
+      "post": {
+        "tags": [
+          "Authenticate"
+        ],
+        "summary": "Method to authenticate a user and access to system",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "description": "User's email. Is the userName",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "User's password",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success: User authorized",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          },
+          "403": {
+            "description": "Unauthorized, password doesn't match."
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
       }
     }
+
+  },
+
+  "definitions": {
+    "User": {
+      "required": [
+        "email",
+        "_id"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "roleId": {
+          "type": "integer"
+        }
+      }
+    },
+    "Users": {
+      "type": "array",
+      "$ref": "#/definitions/User"
+    },
+
+    "Assignment":{
+      "required": [
+        "projectId"
+      ],
+      "properties":{
+        "projectId":{
+          "type": "string",
+          "uniqueItems": true
+        },
+        "name":{
+          "type": "string"
+        },
+        "coments":{
+          "type": "string"
+        },
+        "status":{
+          "type": "string"
+        },
+        "dateStart":{
+          "type": "Date"
+        },
+        "dateEnd":{
+          "type": "Date"
+        },
+        "devPercentage":{
+          "type": "number"
+        },
+        "flowCharts":{
+          "type": "Object"
+        },
+        "useCases":{
+          "type": "Object"
+        },
+        "devMatrix":{
+          "type": "Object"
+        },
+        "responsable":{
+          "type": "User"
+        },
+        "responsableId":{
+          "type": "string",
+          "uniqueItems": true
+        }
+      }
+    },
+
+    "Assignments": {
+      "type": "array",
+      "$ref": "#/definitions/Assignment"
+    },
+
+    "Project": {
+      "required": [
+        "name",
+        "projectId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "projectId": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "responsable": {
+          "type": "User"
+        },
+        "rsponsableId": {
+          "type": "string"
+        }
+      }
+    },
+
+    "Projects": {
+      "type": "array",
+      "$ref": "#/definitions/Project"
+    }
+
   }
+}

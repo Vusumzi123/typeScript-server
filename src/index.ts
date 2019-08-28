@@ -2,7 +2,7 @@ import * as http from 'http';
 import * as debug from 'debug';
 
 import App from './App';
-import { LOGGER } from './_util/logger';
+import {LOGGER} from './util/logger';
 
 debug('ts-express:server');
 
@@ -26,11 +26,13 @@ function onError(error: NodeJS.ErrnoException): void {
     let bind = (typeof port === 'string') ? `Pipe ${port}` : `Port ${port}`;
     switch(error.code) {
         case 'EACCES':
-            console.error(`${bind} requires elevated privileges`);
+            LOGGER.error(`${bind} requires elevated privileges`)
+            debug(`${bind} requires elevated privileges`);
             process.exit(1);
             break;
         case 'EADDRINUSE':
-            console.error(`${bind} is already in use`);
+            LOGGER.error(`${bind} is already in use`);
+            debug(`${bind} is already in use`);
             process.exit(1);
             break;
         default:
@@ -41,6 +43,5 @@ function onError(error: NodeJS.ErrnoException): void {
 function onListening(): void {
     let addr = server.address();
     let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
-    LOGGER.info(`listening on ${bind}`);
-    debug(`Listening on ${bind}`);
+    LOGGER.info(`Listening on ${bind}`);
 }

@@ -1,30 +1,12 @@
-# node-express-ts Server
+#Web service template made with tipe script
 
-This is a Web service boilerplate for typeScript and nodeJs
+global node modules to add
 
-### Steps
-
-to install server 
-1. Run npm install
-```
-npm install
-```
-2. Install the global node modules
-it requires this dependencies to be installed globally.
 ```
 npm install -g gulp
 npm install -g chai
 npm install -g chai-webdriver
 npm install -g webdriver-sizzle
 npm install -g selenium-webdriver
-npm install -g concurrently
-npm install -g 
-```
-3. To run the server run:
-```
-npm start
-```
-4. To run the server in watch mode run:
-```
-npm run watch
+npm install concurrently
 ```
