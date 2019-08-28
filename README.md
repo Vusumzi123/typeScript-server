@@ -1,4 +1,4 @@
-#Web service template made with tipe script
+# Web service template made with type-script
 
 global node modules to add
 
