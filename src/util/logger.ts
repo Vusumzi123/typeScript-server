@@ -1,12 +1,13 @@
 import * as winston from 'winston';
-import * as appRoot from 'app-root-path'
+import * as appRoot from 'app-root-path';
+import * as path from 'path';
 
 const LEVEL = Symbol.for('level');
 
 var options = {
     file: {
         level: 'info',
-        filename: `${appRoot}/logs/app.log`,
+        filename: path.join(appRoot.path, '/logs/app.log'),
         handleExceptions: true,
         json: true,
         maxsize: 5242880, // 5MB
