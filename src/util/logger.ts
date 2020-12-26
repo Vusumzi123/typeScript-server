@@ -6,7 +6,7 @@ const LEVEL = Symbol.for('level');
 
 var options = {
     file: {
-        level: 'info',
+        level: 'debug',
         filename: path.join(appRoot.path, '/logs/app.log'),
         handleExceptions: true,
         json: true,
@@ -16,7 +16,7 @@ var options = {
         colorize: false,
     },
     console: {
-        level: process.env.LEVEL || 'info',
+        level: retriveLevelFromArgs() || process.env.LEVEL || 'info',
         format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.colorize(),
@@ -29,6 +29,14 @@ var options = {
     },
 };
 
+export function retriveLevelFromArgs(){
+    let arg = process.argv.find(e => e.includes('--level'));
+    if( arg ) {
+        let bind = arg.split(':')[1]
+        return bind;
+    }
+}
+
 
 export var LOGGER = winston.createLogger({
     format: winston.format.combine(
@@ -39,7 +47,8 @@ export var LOGGER = winston.createLogger({
         new winston.transports.File(options.file),
         new winston.transports.Console(options.console)
     ],
-    exitOnError: false
+    exitOnError: false,
+    level: retriveLevelFromArgs() || process.env.LEVEL || 'info'
 });
 
 export var stream = {

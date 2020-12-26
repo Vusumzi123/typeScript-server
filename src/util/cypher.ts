@@ -1,14 +1,14 @@
 import {createCipher, createDecipher} from 'crypto';
 import * as path from 'path';
 import * as appRoot from 'app-root-path';
+import { ENV } from '../environment/loadEnv';
 
 class Cypher{
     private algorithm: string;
     private password: string;
-    private ENV = require( path.join(appRoot.path, '/environment.json') );
     constructor(){
-        this.algorithm = process.env.CYPHER_METHOD || this.ENV.cypher.method;
-        this.password = process.env.CYPHER_PWD || this.ENV.cypher.hash;
+        this.algorithm = process.env.CYPHER_METHOD || ENV.cypher.method;
+        this.password = process.env.CYPHER_PWD || ENV.cypher.hash;
     }
 
     /**
