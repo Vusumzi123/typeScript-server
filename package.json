@@ -47,6 +47,7 @@
         "express": "^4.17.1",
         "gulp-util": "^3.0.8",
         "helmet": "^3.23.3",
+        "lodash.template": "^4.5.0",
         "mongoose": "^5.11.8",
         "morgan": "^1.10.0",
         "swagger-ui-express": "^4.1.6",

@@ -57,10 +57,10 @@ class Main {
     private static onListening(): void {
         let addr = Main.server.address();
         let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
-        LOGGER.info(`Listening on ${bind}`);
         LOGGER.info( (ENV as any).prod ? 'server is running in PROD mode' : 'server is running in DEV mode' );
         LOGGER.info( 'Application is logging at ' + LOGGER.level + ' level' )
-        LOGGER.debug( 'app init' )
+        LOGGER.info(`Listening on ${bind}`);
+        LOGGER.debug( 'app init' );
     }
 }
 
